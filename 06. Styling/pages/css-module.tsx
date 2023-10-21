@@ -1,4 +1,4 @@
-import styles from "../styles/css-module.module.css";
+import styles from "../styles/main.module.css";
 
 export default function CSSModulePage() {
   console.log(styles);
