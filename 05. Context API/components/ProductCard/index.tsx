@@ -11,26 +11,7 @@ type Product = {
 function ProductCard({ id, name, price, picture }: Product) {
   const { setItems, items } = useContext(cartContext);
 
-  // const productAmount = id in items ? items[id] : 0;
-  const productAmount = items?.[id] ?? 0;
-
-  // const handleIncrement = useCallback(() => {
-  //   const cnt = items[id] ? items[id] + 1 : 1;
-
-  //   setItems({
-  //     ...items,
-  //     [id]: cnt,
-  //   });
-  // }, []);
-
-  // const handleDecrement = () => {
-  //   const cnt = items[id] ? items[id] - 1 : 0;
-
-  //   setItems({
-  //     ...items,
-  //     [id]: cnt,
-  //   });
-  // };
+  const productAmount = id in items ? items[id] : 0;
 
   const handleAmount = (action: "increment" | "decrement") => {
     if (action === "increment") {
@@ -58,15 +39,14 @@ function ProductCard({ id, name, price, picture }: Product) {
         <button
           className="pl-2 pr-2 bg-red-400 text-white rounded-md"
           disabled={productAmount === 0}
-          // onClick={handleDecrement}
           onClick={() => handleAmount("decrement")}
         >
           -
         </button>
+        {/* 갯수 */}
         <div>{productAmount}</div>
         <button
           className="pl-2 pr-2 bg-green-400 text-white rounded-md"
-          // onClick={handleIncrement}
           onClick={() => handleAmount("increment")}
         >
           +
