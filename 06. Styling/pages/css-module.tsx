@@ -1,6 +1,7 @@
 import styles from "../styles/main.module.css";
 
 export default function CSSModulePage() {
+  console.log("CSS-modules");
   console.log(styles);
 
   return (

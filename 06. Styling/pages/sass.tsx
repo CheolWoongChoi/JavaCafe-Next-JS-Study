@@ -1,6 +1,9 @@
 import styles from "../styles/main.module.scss";
 
 export default function SassPage() {
+  console.log("sass module");
+  console.log(styles);
+
   return (
     <main>
       <div className={styles.homepage}>
