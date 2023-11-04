@@ -1,15 +1,34 @@
+import { Context, HYDRATE, createWrapper } from "next-redux-wrapper";
 import { useMemo } from "react";
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware, AnyAction, Store } from "redux";
 import { composeWithDevTools } from "redux-devtools-extension";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 
-let store;
+// interface Item {
+//   [key: string]: number;
+// }
 
-const initialState = {};
+// interface State {
+//   items: Item[];
+// }
 
-const reducer = (state = initialState, action) => {
+// const initialState: State = {
+//   items: [],
+// };
+
+interface State {
+  [key: string]: number;
+}
+
+const initialState: State = {};
+
+const reducer = (state = initialState, action: AnyAction) => {
   const itemID = action.id;
 
   switch (action.type) {
+    case HYDRATE:
+      return { ...state, ...action.payload };
     case "INCREMENT":
       // eslint-disable-next-line no-case-declarations
       const newItemAmount = itemID in state ? state[itemID] + 1 : 1;
@@ -30,32 +49,13 @@ const reducer = (state = initialState, action) => {
   }
 };
 
-function initStore(preloadedState = initialState) {
-  return createStore(
-    reducer,
-    preloadedState,
-    composeWithDevTools(applyMiddleware())
-  );
-}
+// TODO
+// const persistedReducer = persistReducer({ key: "root", storage }, reducer);
 
-export const initializeStore = (preloadedState) => {
-  let _store = store ?? initStore(preloadedState);
+const store = createStore(reducer, composeWithDevTools());
 
-  if (preloadedState && store) {
-    _store = initStore({
-      ...store.getState(),
-      ...preloadedState,
-    });
-    store = undefined;
-  }
+const makeStore = (context: Context) => store;
 
-  if (typeof window === "undefined") return _store;
-  if (!store) store = _store;
+// export const persistor = persistStore(store);
 
-  return _store;
-};
-
-export function useStore(initialState) {
-  const store = useMemo(() => initializeStore(initialState), [initialState]);
-  return store;
-}
+export const wrapper = createWrapper<Store<State>>(makeStore, { debug: true });

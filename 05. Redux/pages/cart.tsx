@@ -1,5 +1,16 @@
 import { useSelector, shallowEqual } from "react-redux";
 import data from "../data/items";
+import { wrapper } from "@/redux/store";
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  (store) =>
+    ({ req, res, ...etc }) => {
+      store.dispatch({
+        type: "INCREMENT",
+        id: "9126-b921",
+      });
+    }
+);
 
 function useGlobalItems() {
   return useSelector((state) => state, shallowEqual);
